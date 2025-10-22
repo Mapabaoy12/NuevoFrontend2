@@ -10,7 +10,7 @@ export const HomePage = () => {
             title="Nuevos Productos" productos={productos}
         />
         <ProductosGrid
-            title="Productos destacados" productos={[{id:1, title:'Producto Destacado 1'}]}
+            title="Productos destacados" productos={[{id:999, titulo:'Producto Destacado 1', imagen:'', forma:'Circulares', tamanio:'Pequenia', precio:0, descripcion:'Destacado temporal'}]}
         />
 
         <Categoria/>
