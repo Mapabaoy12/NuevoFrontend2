@@ -1,5 +1,6 @@
 import { MdLocalShipping, MdSecurity, MdSupport, MdPayment } from "react-icons/md";
 import type { ElementType } from "react";
+import { FEATURE_MESSAGES } from "../../constants/messages";
 
 interface Destacado {
     id: number;
@@ -12,25 +13,25 @@ const destacados: Destacado[] = [
     {
         id: 1,
         icon: MdLocalShipping,
-        title: "Envío gratis",
+        title: FEATURE_MESSAGES.FREE_SHIPPING,
         description: "En todos los productos"
     },
     {
         id: 2,
         icon: MdSecurity,
-        title: "Compra segura",
+        title: FEATURE_MESSAGES.SECURE_PURCHASE,
         description: "Pagos protegidos"
     },
     {
         id: 3,
         icon: MdSupport,
-        title: "Soporte 24/7",
+        title: FEATURE_MESSAGES.SUPPORT_24_7,
         description: "Estamos para ayudarte"
     },
     {
         id: 4,
         icon: MdPayment,
-        title: "Pago flexible",
+        title: FEATURE_MESSAGES.FLEXIBLE_PAYMENT,
         description: "Múltiples opciones"
     }
 ];

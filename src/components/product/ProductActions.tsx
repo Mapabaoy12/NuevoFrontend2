@@ -1,0 +1,104 @@
+import { useState } from "react";
+import { HiMinus, HiPlus, HiShoppingCart } from "react-icons/hi";
+import { Link } from "react-router-dom";
+import type { Producto } from "../../data/productos";
+import { useCart } from "../../context/CartContext";
+import { FEATURE_MESSAGES } from "../../constants/messages";
+
+interface ProductActionsProps {
+    producto: Producto;
+}
+
+export const ProductActions = ({ producto }: ProductActionsProps) => {
+    const [quantity, setQuantity] = useState(1);
+    const [added, setAdded] = useState(false);
+    const { addToCart } = useCart();
+
+    const handleAddToCart = () => {
+        // Agregar al carrito la cantidad seleccionada
+        for (let i = 0; i < quantity; i++) {
+            addToCart(producto);
+        }
+        
+        setAdded(true);
+        setTimeout(() => {
+            setAdded(false);
+            setQuantity(1); // Reset cantidad
+        }, 2000);
+    };
+
+    const isOutOfStock = producto.stock !== undefined && producto.stock === 0;
+
+    return (
+        <div className="space-y-6 border-t border-slate-200 pt-6">
+            {/* Selector de cantidad */}
+            <div className="space-y-3">
+                <label className="block font-semibold text-sm text-gray-700">
+                    Cantidad
+                </label>
+                <div className="flex items-center gap-3">
+                    <button
+                        onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                        className="p-2 border border-slate-300 hover:bg-gray-100 rounded-lg transition-colors"
+                        disabled={isOutOfStock}
+                    >
+                        <HiMinus size={20} />
+                    </button>
+                    
+                    <span className="w-16 text-center font-semibold text-lg">
+                        {quantity}
+                    </span>
+                    
+                    <button
+                        onClick={() => setQuantity(quantity + 1)}
+                        className="p-2 border border-slate-300 hover:bg-gray-100 rounded-lg transition-colors"
+                        disabled={isOutOfStock}
+                    >
+                        <HiPlus size={20} />
+                    </button>
+                </div>
+            </div>
+
+            {/* Botones de acción */}
+            <div className="flex flex-col sm:flex-row gap-3">
+                <button
+                    onClick={handleAddToCart}
+                    disabled={isOutOfStock}
+                    className={`flex-1 flex items-center justify-center gap-2 py-4 rounded-lg font-medium transition-colors ${
+                        added 
+                            ? 'bg-green-500 text-white' 
+                            : isOutOfStock
+                            ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                            : 'bg-rose-500 text-white hover:bg-rose-600'
+                    }`}
+                >
+                    <HiShoppingCart size={22} />
+                    {added ? '¡Añadido al carrito!' : isOutOfStock ? 'Agotado' : 'Agregar al carrito'}
+                </button>
+
+                <Link
+                    to="/cart"
+                    className="sm:w-auto px-6 py-4 border-2 border-slate-300 rounded-lg font-medium hover:bg-gray-50 transition-colors text-center"
+                >
+                    Ver carrito
+                </Link>
+            </div>
+
+            {/* Información adicional */}
+            <div className="bg-gray-50 p-4 rounded-lg space-y-2 text-sm">
+                <p className="flex items-center gap-2">
+                    <span className="text-green-600">✓</span>
+                    <span>{FEATURE_MESSAGES.FREE_SHIPPING_ALL}</span>
+                </p>
+                <p className="flex items-center gap-2">
+                    <span className="text-green-600">✓</span>
+                    <span>Productos frescos y de calidad</span>
+                </p>
+                <p className="flex items-center gap-2">
+                    <span className="text-green-600">✓</span>
+                    <span>Entrega en 24-48 horas</span>
+                </p>
+            </div>
+        </div>
+    );
+};

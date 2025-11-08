@@ -1,4 +1,9 @@
 export * from "./PastelesPage"
 export * from "./HomePage"
 export * from "./NosotrosPage"
-
+export * from "./CartPage"
+export * from "./ProductDetailPage"
+export * from "./CuentaPage"
+export * from "./LoginPage"
+export * from "./RegistroPage"
+export * from "./AdministradorPage"

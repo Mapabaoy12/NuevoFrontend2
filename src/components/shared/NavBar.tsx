@@ -6,8 +6,10 @@ import { Link } from "react-router-dom";
 import { FaBarsStaggered } from "react-icons/fa6";
 import { Logo } from "./Logo";
 import { CgMenuCake } from 'react-icons/cg';
+import { useCart } from "../../context/CartContext";
 
 export const NavBar = () =>{
+    const { cart } = useCart();
     return ( 
     <header className='bg-yellow-600 text-black py-4 flex items-center justify-between px-5 border-b border-slate-200 lg:px-12'>
         {/*Logo*/}
@@ -39,12 +41,14 @@ export const NavBar = () =>{
                     R
                 </Link>
             </div>
-            <button className="relative">
-                <span className="absolute -bottom-2 -right-2 w-5 h-5 grid place-items-center bg-black text-white text-xs rounded-full">
-                    0
-                </span>
+            <Link to="/cart" className="relative">
+                {cart.itemCount > 0 && (
+                    <span className="absolute -bottom-2 -right-2 w-5 h-5 grid place-items-center bg-black text-white text-xs rounded-full">
+                        {cart.itemCount}
+                    </span>
+                )}
                 <CgMenuCake size={25}/>
-            </button>
+            </Link>
         </div>
 
         <button className="md:hidden">
