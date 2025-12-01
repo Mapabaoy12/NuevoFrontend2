@@ -42,3 +42,8 @@ export const esCumpleanosHoy = (fechaNacimiento: string): boolean => {
   return hoy.getMonth() === nacimiento.getMonth() && 
          hoy.getDate() === nacimiento.getDate();
 };
+
+export const esAdmin = (email: string): boolean => {
+  const emailLower = email.toLowerCase();
+  return emailLower.endsWith('@admin.cl') || emailLower.endsWith('@admin.com');
+};

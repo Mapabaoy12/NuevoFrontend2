@@ -106,10 +106,10 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
             localStorage.setItem('userEmail', usuarioConvertido.email);
             setUser(usuarioConvertido);
             
-            console.log('✅ Registro exitoso:', usuarioConvertido.email);
+            console.log(' Registro exitoso:', usuarioConvertido.email);
             return true;
         } catch (err: any) {
-            console.error('❌ Error en registro:', err);
+            console.error(' Error en registro:', err);
             setError(err.response?.data?.message || 'Error al crear la cuenta');
             return false;
         } finally {
@@ -135,10 +135,10 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
             const usuarioConvertido = convertirAUsuario(response);
             
             setUser(usuarioConvertido);
-            console.log('✅ Usuario actualizado:', user.email);
+            console.log(' Usuario actualizado:', user.email);
             return true;
         } catch (err: any) {
-            console.error('❌ Error al actualizar usuario:', err);
+            console.error('Error al actualizar usuario:', err);
             setError('Error al actualizar información');
             return false;
         } finally {
