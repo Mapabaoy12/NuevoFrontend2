@@ -4,9 +4,26 @@ import type { Producto } from "../../data/productos";
 interface FilteredProductsGridProps {
     productos: Producto[];
     hasActiveFilters: boolean;
+    loading?: boolean;
 }
 
-export const FilteredProductsGrid = ({ productos, hasActiveFilters }: FilteredProductsGridProps) => {
+export const FilteredProductsGrid = ({ productos, hasActiveFilters, loading = false }: FilteredProductsGridProps) => {
+    if (loading) {
+        return (
+            <div className="md:col-span-1 lg:col-span-2 xl:col-span-4 flex flex-col gap-12">
+                <div className="grid grid-cols-2 gap-3 gap-y-10 xl:grid-cols-4">
+                    {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+                        <div key={i} className="animate-pulse">
+                            <div className="bg-gray-200 h-64 rounded-lg mb-4"></div>
+                            <div className="bg-gray-200 h-4 rounded w-3/4 mb-2"></div>
+                            <div className="bg-gray-200 h-4 rounded w-1/2"></div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="md:col-span-1 lg:col-span-2 xl:col-span-4 flex flex-col gap-12">
             {/* Contador de resultados */}

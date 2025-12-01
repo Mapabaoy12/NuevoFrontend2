@@ -1,10 +1,11 @@
 import { createContext, useContext, useReducer, useEffect, type ReactNode } from 'react';
 import type { CartState, CartAction, CartContextType } from '../interfaces/cartInterface';
 import type { Producto } from '../data/productos';
+import { pedidosAPI, type CrearPedidoRequest } from '../api/pedidos';
+import { useUser } from './UserContext';
 
 // Codigos promocionales válidos
 const VALID_PROMO_CODES: Record<string, number> = {
-    
     'FELICES50': 10 
 };
 
@@ -168,6 +169,7 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 // Provider del carrito
 export const CartProvider = ({ children }: { children: ReactNode }) => {
     const [cart, dispatch] = useReducer(cartReducer, initialState);
+    const { user } = useUser();
 
     // Cargar el carrito desde localStorage al iniciar
     useEffect(() => {
@@ -228,6 +230,42 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         dispatch({ type: 'CLEAR_CART' });
     };
 
+    // Nueva función: Confirmar pedido y enviarlo al backend
+    const confirmarPedido = async (): Promise<boolean> => {
+        if (!user) {
+            console.error('❌ Usuario no autenticado');
+            return false;
+        }
+
+        if (cart.items.length === 0) {
+            console.error('❌ Carrito vacío');
+            return false;
+        }
+
+        try {
+            const pedidoRequest: CrearPedidoRequest = {
+                usuarioEmail: user.email,
+                items: cart.items.map(item => ({
+                    productoId: item.id,
+                    cantidad: item.quantity
+                })),
+                codigoPromo: cart.promoCode?.code
+            };
+
+            console.log('📦 Creando pedido:', pedidoRequest);
+            const pedidoCreado = await pedidosAPI.crear(pedidoRequest);
+            console.log('✅ Pedido creado exitosamente:', pedidoCreado);
+
+            // Limpiar carrito después de confirmar
+            clearCart();
+            return true;
+        } catch (error: any) {
+            console.error('❌ Error al crear pedido:', error);
+            console.error('Detalles:', error.response?.data);
+            return false;
+        }
+    };
+
     return (
         <CartContext.Provider
             value={{
@@ -238,6 +276,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
                 applyPromoCode,
                 removePromoCode,
                 clearCart,
+                confirmarPedido,
             }}
         >
             {children}

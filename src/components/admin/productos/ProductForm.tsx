@@ -36,10 +36,8 @@ export const ProductForm = ({ producto, onSubmit, onCancel }: ProductFormProps) 
         e.preventDefault();
         
         if (producto) {
-            // Editar producto existente
             onSubmit({ ...formData, id: producto.id });
         } else {
-            // Crear nuevo producto
             onSubmit(formData);
         }
     };
@@ -61,7 +59,6 @@ export const ProductForm = ({ producto, onSubmit, onCancel }: ProductFormProps) 
                     </h2>
 
                     <form onSubmit={handleSubmit} className="space-y-4">
-                        {/* Titulo */}
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">
                                 Titulo *
@@ -77,7 +74,6 @@ export const ProductForm = ({ producto, onSubmit, onCancel }: ProductFormProps) 
                             />
                         </div>
 
-                        {/* Descripcion */}
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">
                                 Descripcion *
@@ -93,7 +89,6 @@ export const ProductForm = ({ producto, onSubmit, onCancel }: ProductFormProps) 
                             />
                         </div>
 
-                        {/* Precio y Stock */}
                         <div className="grid grid-cols-2 gap-4">
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -128,7 +123,6 @@ export const ProductForm = ({ producto, onSubmit, onCancel }: ProductFormProps) 
                             </div>
                         </div>
 
-                        {/* Forma y Tamanio */}
                         <div className="grid grid-cols-2 gap-4">
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -163,7 +157,6 @@ export const ProductForm = ({ producto, onSubmit, onCancel }: ProductFormProps) 
                             </div>
                         </div>
 
-                        {/* URL de la imagen */}
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">
                                 URL de la Imagen *
@@ -182,7 +175,6 @@ export const ProductForm = ({ producto, onSubmit, onCancel }: ProductFormProps) 
                             </p>
                         </div>
 
-                        {/* Vista previa de la imagen */}
                         {formData.imagen && (
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -201,7 +193,6 @@ export const ProductForm = ({ producto, onSubmit, onCancel }: ProductFormProps) 
                             </div>
                         )}
 
-                        {/* Botones */}
                         <div className="flex gap-3 justify-end pt-4 border-t border-gray-200">
                             <button
                                 type="button"

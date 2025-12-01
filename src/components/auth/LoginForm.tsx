@@ -27,35 +27,17 @@ export const LoginForm = () => {
         });
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         
-        // Buscar usuario en la lista de usuarios registrados
-        const usuariosRegistrados = localStorage.getItem('usuariosRegistrados');
+        const success = await login(formData.email, formData.password);
         
-        if (!usuariosRegistrados) {
-            alert(AUTH_MESSAGES.NO_USERS_REGISTERED);
+        if (success) {
+            alert("Sesión iniciada exitosamente");
+            navigate("/account");
+        } else {
+            alert("Email no encontrado o credenciales inválidas. Por favor, regístrate.");
             navigate("/registro");
-            return;
-        }
-
-        try {
-            const listaUsuarios = JSON.parse(usuariosRegistrados);
-            
-            // Buscar usuario por email
-            const usuarioEncontrado = listaUsuarios.find((u: any) => u.email === formData.email);
-            
-            if (usuarioEncontrado) {
-                // Login exitoso - cargar usuario en el contexto
-                login(usuarioEncontrado);
-                alert("Sesion iniciada exitosamente");
-                navigate("/account");
-            } else {
-                alert(AUTH_MESSAGES.EMAIL_NOT_REGISTERED);
-                navigate("/registro");
-            }
-        } catch {
-            alert(AUTH_MESSAGES.LOGIN_ERROR);
         }
     };
 

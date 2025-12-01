@@ -1,13 +1,39 @@
-import { HiShoppingBag, HiCalendar, HiCheck } from "react-icons/hi";
+import { HiShoppingBag, HiCalendar, HiCheck, HiClock, HiX } from "react-icons/hi";
 import { formatPrice } from "../../utils/formatters";
-import type { Pedido } from "../../interfaces/pedidoInterface";
+import type { PedidoResponse } from "../../api/pedidos";
 
 interface PedidoItemProps {
-    pedido: Pedido;
+    pedido: PedidoResponse;
 }
 
+const getEstadoColor = (estado: string) => {
+    switch (estado) {
+        case 'COMPLETADO':
+            return 'bg-green-100 text-green-800';
+        case 'PENDIENTE':
+            return 'bg-yellow-100 text-yellow-800';
+        case 'CANCELADO':
+            return 'bg-red-100 text-red-800';
+        default:
+            return 'bg-gray-100 text-gray-800';
+    }
+};
+
+const getEstadoIcon = (estado: string) => {
+    switch (estado) {
+        case 'COMPLETADO':
+            return <HiCheck size={16} />;
+        case 'PENDIENTE':
+            return <HiClock size={16} />;
+        case 'CANCELADO':
+            return <HiX size={16} />;
+        default:
+            return <HiClock size={16} />;
+    }
+};
+
 export const PedidoItem = ({ pedido }: PedidoItemProps) => {
-    const formatFecha = (fecha: Date) => {
+    const formatFecha = (fecha: string) => {
         return new Date(fecha).toLocaleDateString('es-CL', {
             day: '2-digit',
             month: 'long',
@@ -25,15 +51,15 @@ export const PedidoItem = ({ pedido }: PedidoItemProps) => {
                         <HiShoppingBag className="text-rose-600" size={24} />
                     </div>
                     <div>
-                        <h3 className="font-semibold text-lg">Pedido #{pedido.id.slice(-8)}</h3>
+                        <h3 className="font-semibold text-lg">Pedido #{pedido.id}</h3>
                         <p className="text-sm text-gray-600 flex items-center gap-1">
                             <HiCalendar size={16} />
                             {formatFecha(pedido.fecha)}
                         </p>
                     </div>
                 </div>
-                <div className="flex items-center gap-2 bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
-                    <HiCheck size={16} />
+                <div className={`flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium ${getEstadoColor(pedido.estado)}`}>
+                    {getEstadoIcon(pedido.estado)}
                     {pedido.estado}
                 </div>
             </div>
@@ -41,12 +67,17 @@ export const PedidoItem = ({ pedido }: PedidoItemProps) => {
             <div className="border-t pt-4">
                 <h4 className="font-medium text-sm text-gray-700 mb-3">Productos ({pedido.items.length})</h4>
                 <div className="space-y-2 mb-4">
-                    {pedido.items.map((item, index) => (
-                        <div key={index} className="flex justify-between text-sm">
-                            <span className="text-gray-600">
-                                {item.quantity}x {item.titulo}
-                            </span>
-                            <span className="font-medium">{formatPrice(item.precio * item.quantity)}</span>
+                    {pedido.items.map((item) => (
+                        <div key={item.id} className="flex justify-between text-sm">
+                            <div className="flex-1">
+                                <span className="text-gray-600">
+                                    {item.cantidad}x {item.titulo}
+                                </span>
+                                <p className="text-xs text-gray-500">
+                                    {item.forma} - {item.tamanio}
+                                </p>
+                            </div>
+                            <span className="font-medium">{formatPrice(item.subtotal)}</span>
                         </div>
                     ))}
                 </div>
@@ -59,7 +90,7 @@ export const PedidoItem = ({ pedido }: PedidoItemProps) => {
                     
                     {pedido.descuentoCodigo > 0 && (
                         <div className="flex justify-between text-sm text-green-600">
-                            <span>Descuento codigo {pedido.codigoPromoAplicado && `(${pedido.codigoPromoAplicado})`}</span>
+                            <span>Descuento código {pedido.codigoPromoAplicado && `(${pedido.codigoPromoAplicado})`}</span>
                             <span>-{formatPrice(pedido.descuentoCodigo)}</span>
                         </div>
                     )}

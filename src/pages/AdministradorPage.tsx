@@ -3,9 +3,10 @@ import { AdminProvider } from '../context/AdminContext';
 import { DashboardNav } from '../components/admin/DashboardNav';
 import { ProductList } from '../components/admin/productos/ProductList';
 import { UserList } from '../components/admin/usuarios/UserList';
+import { PedidoList } from '../components/admin/pedidos/PedidoList';
 
 export const AdministradorPage = () => {
-    const [activeTab, setActiveTab] = useState<'productos' | 'usuarios'>('productos');
+    const [activeTab, setActiveTab] = useState<'productos' | 'usuarios' | 'pedidos'>('productos');
 
     return (
         <AdminProvider>
@@ -17,7 +18,7 @@ export const AdministradorPage = () => {
                             Panel de Administracion
                         </h1>
                         <p className="text-gray-600">
-                            Gestiona productos y usuarios de la pasteleria
+                            Gestiona productos, usuarios y pedidos de la pasteleria
                         </p>
                     </div>
 
@@ -26,11 +27,9 @@ export const AdministradorPage = () => {
 
                     {/* Contenido del Dashboard */}
                     <div className="bg-white rounded-lg shadow-sm p-6">
-                        {activeTab === 'productos' ? (
-                            <ProductList />
-                        ) : (
-                            <UserList />
-                        )}
+                        {activeTab === 'productos' && <ProductList />}
+                        {activeTab === 'usuarios' && <UserList />}
+                        {activeTab === 'pedidos' && <PedidoList />}
                     </div>
                 </div>
             </div>

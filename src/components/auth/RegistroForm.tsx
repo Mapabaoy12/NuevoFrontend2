@@ -31,7 +31,7 @@ export const RegistroForm = () => {
     });
     const [promoInfo, setPromoInfo] = useState<string>("");
     const navigate = useNavigate();
-    const { login } = useUser();
+    const { register } = useUser();
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -71,11 +71,11 @@ export const RegistroForm = () => {
         return adjustedAge <= 102 && adjustedAge >= 0;
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         
         if (formData.password !== formData.confirmPassword) {
-            alert("Las contrasenias no coinciden");
+            alert("Las contraseñas no coinciden");
             return;
         }
 
@@ -96,24 +96,24 @@ export const RegistroForm = () => {
 
         if (esMayorDe50) {
             descuentoPorcentaje = 50;
-            beneficios.push("50% de descuento por ser mayor de 50 anios");
+            beneficios.push("50% de descuento por ser mayor de 50 años");
         } else if (tieneCodigoFelices50) {
             descuentoPorcentaje = 10;
-            beneficios.push("10% de descuento de por vida con codigo FELICES50");
+            beneficios.push("10% de descuento de por vida con código FELICES50");
         }
 
         if (esDuoc) {
-            beneficios.push("Torta gratis en tu cumpleanios como estudiante Duoc UC");
+            beneficios.push("Torta gratis en tu cumpleaños como estudiante Duoc UC");
         }
 
-        // Crear objeto usuario
+        // Crear objeto usuario (sin campos calculados por el backend)
         const nuevoUsuario: Usuario = {
             nombre: formData.nombre,
             email: formData.email,
             telefono: formData.telefono,
             fechaNacimiento: formData.fechaNacimiento,
             direccion: formData.direccion,
-            codigoPromocional: formData.codigoPromocional,
+            codigoPromocional: formData.codigoPromocional || undefined,
             esDuocUC: esDuoc,
             esMayorDe50: esMayorDe50,
             tieneDescuentoFelices50: tieneCodigoFelices50,
@@ -122,42 +122,21 @@ export const RegistroForm = () => {
             tortaGratisCumpleanosUsada: false,
         };
 
-        // Guardar usuario en la lista de usuarios registrados
-        const usuariosRegistrados = localStorage.getItem('usuariosRegistrados');
-        let listaUsuarios = [];
+        // Registrar en el backend
+        const success = await register(nuevoUsuario);
         
-        if (usuariosRegistrados) {
-            try {
-                listaUsuarios = JSON.parse(usuariosRegistrados);
-            } catch {
-                listaUsuarios = [];
+        if (success) {
+            // Mostrar mensaje con beneficios
+            let mensaje = "Cuenta creada exitosamente";
+            if (beneficios.length > 0) {
+                mensaje += "\n\nTus beneficios:\n• " + beneficios.join("\n• ");
             }
+            
+            alert(mensaje);
+            navigate("/account");
+        } else {
+            alert("Error al crear la cuenta. El email podría estar registrado.");
         }
-
-        // Verificar si el email ya existe
-        const emailExiste = listaUsuarios.some((u: Usuario) => u.email === nuevoUsuario.email);
-        
-        if (emailExiste) {
-            alert(AUTH_MESSAGES.EMAIL_ALREADY_REGISTERED);
-            navigate("/login");
-            return;
-        }
-
-        // Agregar nuevo usuario a la lista
-        listaUsuarios.push(nuevoUsuario);
-        localStorage.setItem('usuariosRegistrados', JSON.stringify(listaUsuarios));
-
-        // Guardar usuario en el contexto (iniciar sesion automaticamente)
-        login(nuevoUsuario);
-        
-        // Mostrar mensaje con beneficios
-        let mensaje = "Cuenta creada exitosamente";
-        if (beneficios.length > 0) {
-            mensaje += "\n\nTus beneficios:\n• " + beneficios.join("\n• ");
-        }
-        
-        alert(mensaje);
-        navigate("/account");
     };
 
     return (

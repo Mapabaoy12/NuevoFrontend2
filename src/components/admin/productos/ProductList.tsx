@@ -34,10 +34,8 @@ export const ProductList = () => {
 
     const handleSubmit = (producto: Omit<Producto, 'id'> | Producto) => {
         if ('id' in producto) {
-            // Actualizar producto existente
             actualizarProducto(producto.id, producto);
         } else {
-            // Agregar nuevo producto
             agregarProducto(producto);
         }
         setShowForm(false);
@@ -51,7 +49,6 @@ export const ProductList = () => {
 
     return (
         <div>
-            {/* Header con busqueda y filtros */}
             <div className="mb-6">
                 <div className="flex justify-between items-center mb-4">
                     <h2 className="text-2xl font-bold">Gestion de Productos</h2>
@@ -63,7 +60,6 @@ export const ProductList = () => {
                     </button>
                 </div>
 
-                {/* Barra de busqueda */}
                 <div className="mb-4">
                     <input
                         type="text"
@@ -74,7 +70,6 @@ export const ProductList = () => {
                     />
                 </div>
 
-                {/* Filtros */}
                 <div className="flex gap-4">
                     <div className="flex-1">
                         <label className="block text-sm font-medium text-gray-700 mb-1">

@@ -11,7 +11,6 @@ export const UserList = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [filterBeneficios, setFilterBeneficios] = useState<string>('todos');
 
-    // Filtrar usuarios
     const usuariosFiltrados = usuarios.filter(usuario => {
         const matchesSearch = usuario.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
                             usuario.email.toLowerCase().includes(searchTerm.toLowerCase());
@@ -35,11 +34,8 @@ export const UserList = () => {
 
     const handleSubmit = (usuario: Usuario) => {
         if (editingUser) {
-            // Actualizar usuario existente
             actualizarUsuario(usuario.email, usuario);
         } else {
-            // No permitir agregar usuarios desde el admin (solo editar)
-            // Los usuarios deben registrarse desde el formulario de registro
             alert('Los usuarios deben registrarse desde la pagina de registro');
             return;
         }
@@ -52,14 +48,12 @@ export const UserList = () => {
         setEditingUser(undefined);
     };
 
-    // Estadisticas
     const totalUsuarios = usuarios.length;
     const usuariosConDescuento = usuarios.filter(u => u.descuentoPorcentaje > 0).length;
     const usuariosDuoc = usuarios.filter(u => u.esDuocUC).length;
 
     return (
         <div>
-            {/* Header */}
             <div className="mb-6">
                 <div className="flex justify-between items-center mb-4">
                     <h2 className="text-2xl font-bold">Gestion de Usuarios</h2>
@@ -68,7 +62,6 @@ export const UserList = () => {
                     </div>
                 </div>
 
-                {/* Barra de busqueda */}
                 <div className="mb-4">
                     <input
                         type="text"
@@ -79,7 +72,6 @@ export const UserList = () => {
                     />
                 </div>
 
-                {/* Filtros */}
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                         Filtrar por beneficio
@@ -97,7 +89,6 @@ export const UserList = () => {
                 </div>
             </div>
 
-            {/* Estadisticas */}
             <div className="grid grid-cols-3 gap-4 mb-6">
                 <div className="bg-blue-50 p-4 rounded-lg">
                     <p className="text-sm text-gray-600">Total Usuarios</p>
@@ -113,7 +104,6 @@ export const UserList = () => {
                 </div>
             </div>
 
-            {/* Lista de usuarios */}
             <div className="space-y-4">
                 {usuariosFiltrados.length > 0 ? (
                     usuariosFiltrados.map(usuario => (
@@ -131,7 +121,6 @@ export const UserList = () => {
                 )}
             </div>
 
-            {/* Formulario modal */}
             {showForm && editingUser && (
                 <UserForm
                     usuario={editingUser}

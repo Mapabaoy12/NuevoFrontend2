@@ -35,10 +35,11 @@ export type CartAction =
 // Tipo del contexto
 export interface CartContextType {
     cart: CartState;
-    addToCart: (producto: Producto) => void;
+    addToCart: (producto: import('../data/productos').Producto) => void;
     removeFromCart: (id: number) => void;
     updateQuantity: (id: number, quantity: number) => void;
     applyPromoCode: (code: string) => boolean;
     removePromoCode: () => void;
     clearCart: () => void;
+    confirmarPedido: () => Promise<boolean>;
 }

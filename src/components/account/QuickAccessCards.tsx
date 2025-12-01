@@ -11,34 +11,8 @@ export const QuickAccessCards = () => {
             title: "Mis Pedidos",
             description: "Ver historial de compras",
             link: "/cart"
-        },
-        {
-            id: 2,
-            icon: HiHeart,
-            iconColor: "text-pink-600",
-            bgColor: "bg-pink-100",
-            title: "Favoritos",
-            description: "Pasteles guardados",
-            link: null
-        },
-        {
-            id: 3,
-            icon: HiUser,
-            iconColor: "text-blue-600",
-            bgColor: "bg-blue-100",
-            title: "Perfil",
-            description: "Editar informacion personal",
-            link: null
-        },
-        {
-            id: 4,
-            icon: HiCog,
-            iconColor: "text-gray-600",
-            bgColor: "bg-gray-100",
-            title: "Configuracion",
-            description: "Ajustes de la cuenta",
-            link: null
         }
+        
     ];
 
     return (

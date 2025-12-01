@@ -28,7 +28,6 @@ export const ProductItem = ({ producto, onEdit, onDelete }: ProductItemProps) =>
                     />
                 </div>
 
-                {/* Informacion del producto */}
                 <div className="flex-1">
                     <h3 className="font-semibold text-lg mb-1">{producto.titulo}</h3>
                     <p className="text-sm text-gray-600 mb-2 line-clamp-2">{producto.descripcion}</p>
@@ -50,7 +49,6 @@ export const ProductItem = ({ producto, onEdit, onDelete }: ProductItemProps) =>
                             {formatPrice(producto.precio)}
                         </span>
 
-                        {/* Botones de accion */}
                         <div className="flex gap-2">
                             <button
                                 onClick={() => onEdit(producto)}
@@ -69,7 +67,6 @@ export const ProductItem = ({ producto, onEdit, onDelete }: ProductItemProps) =>
                 </div>
             </div>
 
-            {/* Modal de confirmacion de eliminacion */}
             {showDeleteConfirm && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                     <div className="bg-white p-6 rounded-lg shadow-xl max-w-md">

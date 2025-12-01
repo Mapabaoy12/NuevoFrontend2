@@ -24,7 +24,6 @@ export const UserItem = ({ usuario, onEdit, onDelete }: UserItemProps) => {
                     <p className="text-sm text-gray-600">{usuario.telefono}</p>
                 </div>
 
-                {/* Badges de beneficios */}
                 <div className="flex flex-wrap gap-1 justify-end">
                     {usuario.esMayorDe50 && (
                         <span className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded">
@@ -54,7 +53,6 @@ export const UserItem = ({ usuario, onEdit, onDelete }: UserItemProps) => {
                 )}
             </div>
 
-            {/* Botones de accion */}
             <div className="flex gap-2 justify-end">
                 <button
                     onClick={() => onEdit(usuario)}
@@ -70,7 +68,6 @@ export const UserItem = ({ usuario, onEdit, onDelete }: UserItemProps) => {
                 </button>
             </div>
 
-            {/* Modal de confirmacion de eliminacion */}
             {showDeleteConfirm && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                     <div className="bg-white p-6 rounded-lg shadow-xl max-w-md">

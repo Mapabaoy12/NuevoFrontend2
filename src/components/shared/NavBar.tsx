@@ -31,9 +31,7 @@ export const NavBar = () =>{
         </nav>
 
         <div className="flex gap-5 items-center">
-            <button>
-                <HiOutlineSearch size={25}/>
-            </button>
+           
 
             <div className="relative">
                 {/*Usuario nav */}

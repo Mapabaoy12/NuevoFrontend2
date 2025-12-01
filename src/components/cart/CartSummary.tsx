@@ -17,8 +17,8 @@ interface CartSummaryProps {
 
 export const CartSummary = ({ cart, onApplyPromoCode, onRemovePromoCode }: CartSummaryProps) => {
     const { user, isAuthenticated } = useUser();
-    const { agregarPedido } = usePedidos();
-    const { clearCart } = useCart();
+    const { cargarPedidosUsuario } = usePedidos();
+    const { clearCart, confirmarPedido } = useCart();
     const navigate = useNavigate();
     const [isProcessing, setIsProcessing] = useState(false);
     
@@ -32,45 +32,44 @@ export const CartSummary = ({ cart, onApplyPromoCode, onRemovePromoCode }: CartS
     // Total con descuentos de usuario y codigo promocional
     const totalConDescuentos = cart.total - userDiscount;
 
-    const handleProcederPago = () => {
+    const handleProcederPago = async () => {
         // Verificar que el usuario esté logueado
         if (!isAuthenticated || !user) {
-            alert("Debes iniciar sesion para realizar una compra");
+            alert("Debes iniciar sesión para realizar una compra");
             navigate("/login");
             return;
         }
 
         // Verificar que haya items en el carrito
         if (cart.items.length === 0) {
-            alert("Tu carrito esta vacio");
+            alert("Tu carrito está vacío");
             return;
         }
 
         setIsProcessing(true);
 
-        // Simular procesamiento de pago
-        setTimeout(() => {
-            // Crear el pedido
-            agregarPedido({
-                items: cart.items,
-                subtotal: cart.subtotal,
-                descuentoCodigo: cart.discount,
-                descuentoUsuario: userDiscount,
-                total: totalConDescuentos,
-                codigoPromoAplicado: cart.promoCode?.code
-            });
+        try {
+            // Crear el pedido en el backend
+            const success = await confirmarPedido();
 
-            // Vaciar el carrito
-            clearCart();
+            if (success) {
+                // Recargar pedidos del usuario
+                await cargarPedidosUsuario();
 
+                // Mostrar mensaje de éxito
+                alert("✅ Compra realizada exitosamente!\n\nPuedes ver tu pedido en tu perfil.");
+
+                // Redirigir a la página de cuenta
+                navigate("/account");
+            } else {
+                alert("❌ Error al procesar la compra. Por favor, intenta nuevamente.");
+            }
+        } catch (error) {
+            console.error('Error al procesar pago:', error);
+            alert("❌ Error al procesar la compra. Por favor, intenta nuevamente.");
+        } finally {
             setIsProcessing(false);
-
-            // Mostrar mensaje de exito
-            alert("Compra realizada exitosamente \n\nPuedes ver tu pedido en tu perfil.");
-
-            // Redirigir a la página de cuenta
-            navigate("/account");
-        }, 1500);
+        }
     };
 
     return (

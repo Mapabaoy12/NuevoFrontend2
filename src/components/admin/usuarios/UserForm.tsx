@@ -34,13 +34,11 @@ export const UserForm = ({ usuario, onSubmit, onCancel }: UserFormProps) => {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
-        // Calcular beneficios automaticamente
         const edad = calcularEdad(formData.fechaNacimiento);
         const esMayorDe50 = edad >= 50;
         const esDuocUC = esDuocEmail(formData.email);
         const tieneDescuentoFelices50 = formData.codigoPromocional?.toUpperCase() === 'FELICES50';
 
-        // Calcular descuento porcentaje
         let descuentoPorcentaje = 0;
         if (esMayorDe50) {
             descuentoPorcentaje = 50;
@@ -70,7 +68,6 @@ export const UserForm = ({ usuario, onSubmit, onCancel }: UserFormProps) => {
         }));
     };
 
-    // Validacion de edad maxima
     const getMaxDate = () => {
         const today = new Date();
         const maxDate = new Date(today.getFullYear() - 102, today.getMonth(), today.getDate());
@@ -91,7 +88,6 @@ export const UserForm = ({ usuario, onSubmit, onCancel }: UserFormProps) => {
                     </h2>
 
                     <form onSubmit={handleSubmit} className="space-y-4">
-                        {/* Nombre */}
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">
                                 Nombre Completo *
@@ -107,7 +103,6 @@ export const UserForm = ({ usuario, onSubmit, onCancel }: UserFormProps) => {
                             />
                         </div>
 
-                        {/* Email */}
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">
                                 Email *
@@ -118,7 +113,7 @@ export const UserForm = ({ usuario, onSubmit, onCancel }: UserFormProps) => {
                                 value={formData.email}
                                 onChange={handleChange}
                                 required
-                                disabled={!!usuario} // No permitir cambiar email al editar
+                                disabled={!!usuario} 
                                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent disabled:bg-gray-100"
                                 placeholder="usuario@ejemplo.com"
                             />
@@ -129,7 +124,6 @@ export const UserForm = ({ usuario, onSubmit, onCancel }: UserFormProps) => {
                             )}
                         </div>
 
-                        {/* Telefono */}
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">
                                 Telefono *
@@ -145,7 +139,6 @@ export const UserForm = ({ usuario, onSubmit, onCancel }: UserFormProps) => {
                             />
                         </div>
 
-                        {/* Fecha de Nacimiento */}
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">
                                 Fecha de Nacimiento *
@@ -165,7 +158,6 @@ export const UserForm = ({ usuario, onSubmit, onCancel }: UserFormProps) => {
                             </p>
                         </div>
 
-                        {/* Direccion */}
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">
                                 Direccion *
@@ -181,7 +173,6 @@ export const UserForm = ({ usuario, onSubmit, onCancel }: UserFormProps) => {
                             />
                         </div>
 
-                        {/* Codigo Promocional */}
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">
                                 Codigo Promocional (Opcional)
@@ -199,7 +190,6 @@ export const UserForm = ({ usuario, onSubmit, onCancel }: UserFormProps) => {
                             </p>
                         </div>
 
-                        {/* Informacion de beneficios */}
                         <div className="bg-blue-50 p-4 rounded-lg">
                             <h3 className="font-medium text-sm mb-2">Beneficios automaticos:</h3>
                             <ul className="text-xs text-gray-700 space-y-1">
@@ -209,7 +199,6 @@ export const UserForm = ({ usuario, onSubmit, onCancel }: UserFormProps) => {
                             </ul>
                         </div>
 
-                        {/* Botones */}
                         <div className="flex gap-3 justify-end pt-4 border-t border-gray-200">
                             <button
                                 type="button"

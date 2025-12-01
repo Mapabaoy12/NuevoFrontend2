@@ -1,64 +1,68 @@
 import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
-import type { Pedido, PedidosContextType } from '../interfaces/pedidoInterface';
+import { pedidosAPI, type PedidoResponse } from '../api/pedidos';
 import { useUser } from './UserContext';
+
+interface PedidosContextType {
+    pedidos: PedidoResponse[];
+    loading: boolean;
+    error: string | null;
+    cargarPedidosUsuario: () => Promise<void>;
+    obtenerPedidoPorId: (id: number) => PedidoResponse | undefined;
+}
 
 const PedidosContext = createContext<PedidosContextType | undefined>(undefined);
 
 export const PedidosProvider = ({ children }: { children: ReactNode }) => {
-    const [pedidos, setPedidos] = useState<Pedido[]>([]);
+    const [pedidos, setPedidos] = useState<PedidoResponse[]>([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
     const { user } = useUser();
 
-    // Cargar pedidos desde localStorage al iniciar
-    useEffect(() => {
-        const savedPedidos = localStorage.getItem('pedidos');
-        if (savedPedidos) {
-            try {
-                const parsedPedidos = JSON.parse(savedPedidos);
-                // Convertir las fechas de string a Date
-                const pedidosConFechas = parsedPedidos.map((p: any) => ({
-                    ...p,
-                    fecha: new Date(p.fecha)
-                }));
-                setPedidos(pedidosConFechas);
-            } catch {
-                // Si hay error, limpiar datos corruptos
-                localStorage.removeItem('pedidos');
-            }
-        }
-    }, []);
-
-    // Guardar pedidos en localStorage cada vez que cambien
-    useEffect(() => {
-        if (pedidos.length > 0) {
-            localStorage.setItem('pedidos', JSON.stringify(pedidos));
-        }
-    }, [pedidos]);
-
-    const agregarPedido = (pedidoData: Omit<Pedido, 'id' | 'fecha' | 'estado'>) => {
+    const cargarPedidosUsuario = async () => {
         if (!user) {
-            return; // Silenciosamente no hacer nada si no hay usuario
+            setPedidos([]);
+            return;
         }
 
-        const nuevoPedido: Pedido = {
-            ...pedidoData,
-            id: `${user.email}-${Date.now()}`,
-            fecha: new Date(),
-            estado: 'completado'
-        };
-
-        setPedidos(prev => [nuevoPedido, ...prev]);
+        try {
+            setLoading(true);
+            setError(null);
+            
+            console.log('🔄 Cargando pedidos del usuario:', user.email);
+            const pedidosBackend = await pedidosAPI.obtenerPorUsuario(user.email);
+            console.log('✅ Pedidos cargados:', pedidosBackend.length);
+            
+            setPedidos(pedidosBackend);
+        } catch (err: any) {
+            console.error('❌ Error al cargar pedidos:', err);
+            setError('No se pudieron cargar los pedidos');
+            setPedidos([]);
+        } finally {
+            setLoading(false);
+        }
     };
 
-    const obtenerPedidosUsuario = (userEmail: string): Pedido[] => {
-        return pedidos.filter(pedido => pedido.id.startsWith(userEmail));
+    // Cargar pedidos cuando el usuario cambie
+    useEffect(() => {
+        if (user) {
+            cargarPedidosUsuario();
+        } else {
+            setPedidos([]);
+        }
+    }, [user]);
+
+    const obtenerPedidoPorId = (id: number): PedidoResponse | undefined => {
+        return pedidos.find(p => p.id === id);
     };
 
     return (
         <PedidosContext.Provider
             value={{
                 pedidos,
-                agregarPedido,
-                obtenerPedidosUsuario
+                loading,
+                error,
+                cargarPedidosUsuario,
+                obtenerPedidoPorId
             }}
         >
             {children}

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { productos, type Producto } from "../data/productos";
+import { useProductos } from "../context/ProductosContext";
+import type { Producto } from "../data/productos";
 import { ProductImage } from "../components/product/ProductImage";
 import { ProductInfo } from "../components/product/ProductInfo";
 import { ProductActions } from "../components/product/ProductActions";
@@ -9,14 +10,23 @@ import { HiArrowLeft } from "react-icons/hi";
 
 export const ProductDetailPage = () => {
     const { id } = useParams();
+    const { obtenerProductoPorId, loading } = useProductos();
     const [producto, setProducto] = useState<Producto | null>(null);
 
     useEffect(() => {
-        const foundProducto = productos.find(p => p.id === Number(id));
-        if (foundProducto) {
-            setProducto(foundProducto);
+        if (id) {
+            const foundProducto = obtenerProductoPorId(Number(id));
+            setProducto(foundProducto || null);
         }
-    }, [id]);
+    }, [id, obtenerProductoPorId]);
+
+    if (loading) {
+        return (
+            <div className="flex justify-center items-center min-h-[400px]">
+                <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-rose-500"></div>
+            </div>
+        );
+    }
 
     if (!producto) {
         return <ProductNotFound />;

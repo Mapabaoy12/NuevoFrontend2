@@ -8,7 +8,7 @@ import { QuickAccessCards } from "../components/account/QuickAccessCards";
 
 export const CuentaPage = () => {
     const { user, logout, isAuthenticated } = useUser();
-    const { obtenerPedidosUsuario } = usePedidos();
+    const { pedidos, loading } = usePedidos();
     const navigate = useNavigate();
 
     if (!isAuthenticated || !user) {
@@ -20,15 +20,13 @@ export const CuentaPage = () => {
         navigate("/");
     };
 
-    const pedidosUsuario = obtenerPedidosUsuario(user.email);
-
     return (
         <div className="py-8 px-4">
             <h1 className="text-4xl font-bold mb-8">Mi Cuenta</h1>
 
             <div className="max-w-6xl mx-auto">
                 <UserProfile user={user} onLogout={handleLogout} />
-                <OrdersList pedidos={pedidosUsuario} />
+                <OrdersList pedidos={pedidos} loading={loading} />
                 <QuickAccessCards />
             </div>
         </div>
