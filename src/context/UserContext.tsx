@@ -13,7 +13,7 @@ interface UserContextType {
     isAuthenticated: boolean;
 }
 
-const UserContext = createContext<UserContextType | undefined>(undefined);
+export const UserContext = createContext<UserContextType | undefined>(undefined);
 
 // Convertir UsuarioResponse a Usuario
 const convertirAUsuario = (response: UsuarioResponse): Usuario => ({

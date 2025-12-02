@@ -5,7 +5,7 @@ import { InputField } from "./InputField";
 import { RememberMeCheckbox } from "./RememberMeCheckbox";
 import { ForgotPasswordLink } from "./ForgotPasswordLink";
 import { useUser } from "../../context/UserContext";
-import { AUTH_MESSAGES } from "../../constants/messages";
+import { esAdmin } from "../../data/Usuario";
 
 interface LoginFormData {
     email: string;
@@ -34,7 +34,10 @@ export const LoginForm = () => {
         
         if (success) {
             alert("Sesión iniciada exitosamente");
-            navigate("/account");
+            if (esAdmin(formData.email)) {
+                navigate("/admin");
+            }else{ navigate("/account");} 
+
         } else {
             alert("Email no encontrado o credenciales inválidas. Por favor, regístrate.");
             navigate("/registro");

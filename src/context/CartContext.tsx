@@ -3,6 +3,7 @@ import type { CartState, CartAction, CartContextType } from '../interfaces/cartI
 import type { Producto } from '../data/productos';
 import { pedidosAPI, type CrearPedidoRequest } from '../api/pedidos';
 import { useUser } from './UserContext';
+import { useProductos } from './ProductosContext';
 
 // Codigos promocionales válidos
 const VALID_PROMO_CODES: Record<string, number> = {
@@ -170,6 +171,7 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 export const CartProvider = ({ children }: { children: ReactNode }) => {
     const [cart, dispatch] = useReducer(cartReducer, initialState);
     const { user } = useUser();
+    const {cargarProductos} = useProductos();
 
     // Cargar el carrito desde localStorage al iniciar
     useEffect(() => {
@@ -233,12 +235,12 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     // Nueva función: Confirmar pedido y enviarlo al backend
     const confirmarPedido = async (): Promise<boolean> => {
         if (!user) {
-            console.error('❌ Usuario no autenticado');
+            console.error(' Usuario no autenticado');
             return false;
         }
 
         if (cart.items.length === 0) {
-            console.error('❌ Carrito vacío');
+            console.error(' Carrito vacío');
             return false;
         }
 
@@ -252,18 +254,21 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
                 codigoPromo: cart.promoCode?.code
             };
 
-            console.log('📦 Creando pedido:', pedidoRequest);
+
+            console.log(' Creando pedido:', pedidoRequest);
             const pedidoCreado = await pedidosAPI.crear(pedidoRequest);
-            console.log('✅ Pedido creado exitosamente:', pedidoCreado);
+            console.log(' Pedido creado exitosamente:', pedidoCreado);
+            await cargarProductos();
 
             // Limpiar carrito después de confirmar
             clearCart();
             return true;
         } catch (error: any) {
-            console.error('❌ Error al crear pedido:', error);
+            console.error(' Error al crear pedido:', error);
             console.error('Detalles:', error.response?.data);
             return false;
         }
+    
     };
 
     return (

@@ -44,6 +44,6 @@ export const esCumpleanosHoy = (fechaNacimiento: string): boolean => {
 };
 
 export const esAdmin = (email: string): boolean => {
-  const emailLower = email.toLowerCase();
-  return emailLower.endsWith('@admin.cl') || emailLower.endsWith('@admin.com');
+  const admin_email = "matias@administrador.cl";
+  return email.toLowerCase() === admin_email.toLowerCase();
 };

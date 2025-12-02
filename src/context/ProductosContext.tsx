@@ -24,9 +24,9 @@ export const ProductosProvider = ({ children }: { children: ReactNode }) => {
         setLoading(true);
         setError(null);
         try {
-            console.log('🔄 Cargando productos desde el backend...');
+            console.log(' Cargando productos desde el backend...');
             const productosBackend = await productosAPI.obtenerTodos();
-            console.log('✅ Productos cargados:', productosBackend.length);
+            console.log(' Productos cargados:', productosBackend.length);
             
             const productosConvertidos = productosBackend.map(p => ({
                 id: p.id,
@@ -40,7 +40,7 @@ export const ProductosProvider = ({ children }: { children: ReactNode }) => {
             }));
             setProductos(productosConvertidos);
         } catch (err) {
-            console.error('❌ Error al cargar productos:', err);
+            console.error(' Error al cargar productos:', err);
             setError('No se pudieron cargar los productos del servidor. Usando datos locales.');
             setProductos(productosIniciales);
         } finally {
